@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "opencode-orchestrator"
+version = "0.1.0"
+description = "Multi-agent project orchestrator built on OpenAI Agents SDK"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.115",
+  "openai-agents>=0.0.17",
+  "pydantic>=2.8",
+  "uvicorn>=0.30",
+]
+
+[project.scripts]
+opencode-orchestrator = "opencode_orchestrator.cli:main"
+orchestrator-visualizer-api = "orchestrator_visualizer.api:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

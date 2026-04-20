@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orchestrator Visualizer</title>
+  <link rel="stylesheet" href="/visualizer-assets/dashboard.css" />
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Observer Dashboard</p>
+        <h1>Orchestrator Visualizer</h1>
+        <p class="muted">Timeline, file impact, approvals and verification for recorded orchestrator runs.</p>
+      </div>
+      <div class="row">
+        <button id="refresh-button" class="button primary">Refresh</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Runs</h2>
+          <span id="run-count" class="pill">0</span>
+        </div>
+        <div id="runs-list" class="list"></div>
+      </section>
+
+      <section class="panel detail-panel">
+        <div class="panel-head">
+          <h2>Run Details</h2>
+          <span id="run-status" class="pill">none</span>
+        </div>
+
+        <div id="empty-state" class="empty">Select a run to inspect its timeline and artifacts.</div>
+
+        <div id="detail-content" class="hidden">
+          <div class="summary-grid">
+            <div class="card"><strong>Objective</strong><div id="summary-objective" class="muted"></div></div>
+            <div class="card"><strong>Started</strong><div id="summary-started" class="muted"></div></div>
+            <div class="card"><strong>Finished</strong><div id="summary-finished" class="muted"></div></div>
+            <div class="card"><strong>Workspace</strong><div id="summary-workspace" class="muted"></div></div>
+          </div>
+
+          <div class="metric-grid">
+            <div class="metric-card">
+              <span class="metric-label">Events</span>
+              <strong id="metric-events">0</strong>
+            </div>
+            <div class="metric-card">
+              <span class="metric-label">Files</span>
+              <strong id="metric-files">0</strong>
+            </div>
+            <div class="metric-card">
+              <span class="metric-label">Approvals</span>
+              <strong id="metric-approvals">0</strong>
+            </div>
+            <div class="metric-card">
+              <span class="metric-label">Verification</span>
+              <strong id="metric-verification">0</strong>
+            </div>
+            <div class="metric-card">
+              <span class="metric-label">Passed Checks</span>
+              <strong id="metric-passed">0</strong>
+            </div>
+            <div class="metric-card">
+              <span class="metric-label">Failed Checks</span>
+              <strong id="metric-failed">0</strong>
+            </div>
+          </div>
+
+          <div class="split">
+            <section class="subpanel">
+              <div class="subpanel-head">
+                <h3>Timeline</h3>
+                <div class="filter-row">
+                  <select id="timeline-type-filter" class="control compact">
+                    <option value="all">All Types</option>
+                  </select>
+                  <select id="timeline-status-filter" class="control compact">
+                    <option value="all">All Statuses</option>
+                  </select>
+                </div>
+              </div>
+              <div id="timeline" class="list"></div>
+            </section>
+            <section class="subpanel">
+              <div class="subpanel-head"><h3>File Impact</h3></div>
+              <div id="files" class="list"></div>
+            </section>
+          </div>
+
+          <div class="split">
+            <section class="subpanel">
+              <div class="subpanel-head"><h3>Approvals</h3></div>
+              <div id="approvals" class="list"></div>
+            </section>
+            <section class="subpanel">
+              <div class="subpanel-head"><h3>Verification</h3></div>
+              <div id="verification" class="list"></div>
+            </section>
+          </div>
+
+          <section class="subpanel" style="margin-top: 18px;">
+            <div class="subpanel-head"><h3>Graph View</h3></div>
+            <div class="graph-layout">
+              <div>
+                <h4>Nodes</h4>
+                <div id="graph-nodes" class="list"></div>
+              </div>
+              <div>
+                <h4>Edges</h4>
+                <div id="graph-edges" class="list"></div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="/visualizer-assets/dashboard.js"></script>
+</body>
+</html>

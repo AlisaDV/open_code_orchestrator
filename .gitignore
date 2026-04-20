@@ -1,0 +1,14 @@
+.opencode_observer/
+.pytest_cache/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.zip
+tmp_visualizer_demo.txt
+
+projects/
+
+src/*.egg-info/
+src/opencode_orchestrator.egg-info/
