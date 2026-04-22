@@ -1,0 +1,128 @@
+[
+  {
+    "ts": "2026-04-20T07:42:01.328Z",
+    "method": "GET",
+    "url": "http://localhost:8081/",
+    "status": 200,
+    "resourceType": "document"
+  },
+  {
+    "ts": "2026-04-20T07:42:01.330Z",
+    "method": "GET",
+    "url": "http://localhost:8081/assets/app.css",
+    "status": 200,
+    "resourceType": "stylesheet"
+  },
+  {
+    "ts": "2026-04-20T07:42:01.330Z",
+    "method": "GET",
+    "url": "http://localhost:8081/assets/common.js",
+    "status": 200,
+    "resourceType": "script"
+  },
+  {
+    "ts": "2026-04-20T07:42:01.547Z",
+    "method": "POST",
+    "url": "http://localhost:8081/api/auth/register",
+    "status": 200,
+    "resourceType": "fetch"
+  },
+  {
+    "ts": "2026-04-20T07:42:01.557Z",
+    "method": "GET",
+    "url": "http://localhost:8081/app/user.html",
+    "status": 200,
+    "resourceType": "document"
+  },
+  {
+    "ts": "2026-04-20T07:42:01.561Z",
+    "method": "GET",
+    "url": "http://localhost:8081/assets/app.css",
+    "status": 200,
+    "resourceType": "stylesheet"
+  },
+  {
+    "ts": "2026-04-20T07:42:01.561Z",
+    "method": "GET",
+    "url": "http://localhost:8081/assets/common.js",
+    "status": 200,
+    "resourceType": "script"
+  },
+  {
+    "ts": "2026-04-20T07:42:01.575Z",
+    "method": "GET",
+    "url": "http://localhost:8081/api/tasks",
+    "status": 200,
+    "resourceType": "fetch"
+  },
+  {
+    "ts": "2026-04-20T07:42:01.587Z",
+    "method": "GET",
+    "url": "http://localhost:8081/api/chats",
+    "status": 200,
+    "resourceType": "fetch"
+  },
+  {
+    "ts": "2026-04-20T07:42:01.934Z",
+    "method": "POST",
+    "url": "http://localhost:8081/api/tasks",
+    "status": 200,
+    "resourceType": "fetch"
+  },
+  {
+    "ts": "2026-04-20T07:42:01.951Z",
+    "method": "GET",
+    "url": "http://localhost:8081/api/tasks",
+    "status": 200,
+    "resourceType": "fetch"
+  },
+  {
+    "ts": "2026-04-20T07:42:02.383Z",
+    "method": "POST",
+    "url": "http://localhost:8081/api/chats",
+    "status": 200,
+    "resourceType": "fetch"
+  },
+  {
+    "ts": "2026-04-20T07:42:02.396Z",
+    "method": "GET",
+    "url": "http://localhost:8081/api/chats",
+    "status": 200,
+    "resourceType": "fetch"
+  },
+  {
+    "ts": "2026-04-20T07:42:02.409Z",
+    "method": "GET",
+    "url": "http://localhost:8081/api/chats/9da9c8eb-f54e-4802-9ab0-8e1c006eae47/messages",
+    "status": 200,
+    "resourceType": "fetch"
+  },
+  {
+    "ts": "2026-04-20T07:42:02.829Z",
+    "method": "GET",
+    "url": "http://localhost:8081/api/chats/9da9c8eb-f54e-4802-9ab0-8e1c006eae47/messages",
+    "status": 200,
+    "resourceType": "fetch"
+  },
+  {
+    "ts": "2026-04-20T07:42:02.872Z",
+    "method": "POST",
+    "url": "http://localhost:8081/api/chats/9da9c8eb-f54e-4802-9ab0-8e1c006eae47/messages",
+    "status": 200,
+    "resourceType": "fetch"
+  },
+  {
+    "ts": "2026-04-20T07:42:02.893Z",
+    "method": "GET",
+    "url": "http://localhost:8081/api/chats/9da9c8eb-f54e-4802-9ab0-8e1c006eae47/messages",
+    "status": 200,
+    "resourceType": "fetch"
+  },
+  {
+    "ts": "2026-04-20T07:42:02.906Z",
+    "method": "GET",
+    "url": "http://localhost:8081/api/chats",
+    "status": 200,
+    "resourceType": "fetch"
+  }
+]

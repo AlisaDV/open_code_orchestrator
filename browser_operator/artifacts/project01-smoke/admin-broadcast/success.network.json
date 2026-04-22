@@ -1,0 +1,100 @@
+[
+  {
+    "ts": "2026-04-20T07:42:03.622Z",
+    "method": "GET",
+    "url": "http://localhost:8081/",
+    "status": 200,
+    "resourceType": "document"
+  },
+  {
+    "ts": "2026-04-20T07:42:03.626Z",
+    "method": "GET",
+    "url": "http://localhost:8081/assets/common.js",
+    "status": 200,
+    "resourceType": "script"
+  },
+  {
+    "ts": "2026-04-20T07:42:03.627Z",
+    "method": "GET",
+    "url": "http://localhost:8081/assets/app.css",
+    "status": 200,
+    "resourceType": "stylesheet"
+  },
+  {
+    "ts": "2026-04-20T07:42:03.853Z",
+    "method": "POST",
+    "url": "http://localhost:8081/api/auth/login",
+    "status": 200,
+    "resourceType": "fetch"
+  },
+  {
+    "ts": "2026-04-20T07:42:03.863Z",
+    "method": "GET",
+    "url": "http://localhost:8081/app/admin.html",
+    "status": 200,
+    "resourceType": "document"
+  },
+  {
+    "ts": "2026-04-20T07:42:03.869Z",
+    "method": "GET",
+    "url": "http://localhost:8081/assets/app.css",
+    "status": 200,
+    "resourceType": "stylesheet"
+  },
+  {
+    "ts": "2026-04-20T07:42:03.870Z",
+    "method": "GET",
+    "url": "http://localhost:8081/assets/common.js",
+    "status": 200,
+    "resourceType": "script"
+  },
+  {
+    "ts": "2026-04-20T07:42:03.888Z",
+    "method": "GET",
+    "url": "http://localhost:8081/api/admin/users",
+    "status": 200,
+    "resourceType": "fetch"
+  },
+  {
+    "ts": "2026-04-20T07:42:03.896Z",
+    "method": "GET",
+    "url": "http://localhost:8081/api/admin/broadcasts",
+    "status": 200,
+    "resourceType": "fetch"
+  },
+  {
+    "ts": "2026-04-20T07:42:03.908Z",
+    "method": "GET",
+    "url": "http://localhost:8081/api/chats",
+    "status": 200,
+    "resourceType": "fetch"
+  },
+  {
+    "ts": "2026-04-20T07:42:04.216Z",
+    "method": "POST",
+    "url": "http://localhost:8081/api/admin/broadcasts",
+    "status": 200,
+    "resourceType": "fetch"
+  },
+  {
+    "ts": "2026-04-20T07:42:04.230Z",
+    "method": "GET",
+    "url": "http://localhost:8081/api/admin/broadcasts",
+    "status": 200,
+    "resourceType": "fetch"
+  },
+  {
+    "ts": "2026-04-20T07:42:04.818Z",
+    "method": "POST",
+    "url": "http://localhost:8081/api/admin/broadcasts/run",
+    "status": 200,
+    "resourceType": "fetch"
+  },
+  {
+    "ts": "2026-04-20T07:42:04.835Z",
+    "method": "GET",
+    "url": "http://localhost:8081/api/admin/broadcasts",
+    "status": 200,
+    "resourceType": "fetch"
+  }
+]

@@ -61,6 +61,17 @@ def create_app(config: VisualizerConfig | None = None) -> FastAPI:
             raise HTTPException(status_code=404, detail="Run not found")
         return [item.model_dump(mode="json") for item in repo.list_verification_results(run_id)]
 
+    @app.get("/browser-smoke")
+    def list_browser_smoke_reports() -> list[dict]:
+        return [item.model_dump(mode="json") for item in repo.list_browser_smoke_reports()]
+
+    @app.get("/browser-smoke/latest")
+    def latest_browser_smoke_report() -> dict:
+        report = repo.latest_browser_smoke_report()
+        if report is None:
+            raise HTTPException(status_code=404, detail="Browser smoke report not found")
+        return report.model_dump(mode="json")
+
     return app
 
 

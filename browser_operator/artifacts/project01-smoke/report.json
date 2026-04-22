@@ -1,0 +1,80 @@
+{
+  "startedAt": "2026-04-22T11:47:14.042Z",
+  "finishedAt": "2026-04-22T11:47:23.234Z",
+  "targetUrl": "http://localhost:8081",
+  "total": 3,
+  "passed": 0,
+  "failed": 3,
+  "scenarios": [
+    {
+      "name": "auth-admin",
+      "startedAt": "2026-04-22T11:47:14.042Z",
+      "steps": [
+        {
+          "name": "open-login-page",
+          "status": "failed",
+          "startedAt": "2026-04-22T11:47:15.144Z",
+          "finishedAt": "2026-04-22T11:47:17.477Z",
+          "error": "Bridge 500 Internal Server Error: {\"error\":\"internal_error\",\"message\":\"Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8081/\\nCall log:\\n\\u001b[2m  - navigating to \\\"http://localhost:8081/\\\", waiting until \\\"load\\\"\\u001b[22m\\n\"}"
+        }
+      ],
+      "finishedAt": "2026-04-22T11:47:17.605Z",
+      "status": "failed",
+      "error": "Bridge 500 Internal Server Error: {\"error\":\"internal_error\",\"message\":\"Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8081/\\nCall log:\\n\\u001b[2m  - navigating to \\\"http://localhost:8081/\\\", waiting until \\\"load\\\"\\u001b[22m\\n\"}",
+      "artifacts": {
+        "screenshotPath": "C:\\work\\open_code_orchestrator\\browser_operator\\artifacts\\project01-smoke\\auth-admin\\failure.png",
+        "consolePath": "C:\\work\\open_code_orchestrator\\browser_operator\\artifacts\\project01-smoke\\auth-admin\\failure.console.json",
+        "networkPath": "C:\\work\\open_code_orchestrator\\browser_operator\\artifacts\\project01-smoke\\auth-admin\\failure.network.json"
+      }
+    },
+    {
+      "name": "user-task-chat",
+      "startedAt": "2026-04-22T11:47:17.703Z",
+      "steps": [
+        {
+          "name": "open-register-page",
+          "status": "failed",
+          "startedAt": "2026-04-22T11:47:17.901Z",
+          "finishedAt": "2026-04-22T11:47:20.284Z",
+          "error": "Bridge 500 Internal Server Error: {\"error\":\"internal_error\",\"message\":\"Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8081/\\nCall log:\\n\\u001b[2m  - navigating to \\\"http://localhost:8081/\\\", waiting until \\\"load\\\"\\u001b[22m\\n\"}"
+        }
+      ],
+      "finishedAt": "2026-04-22T11:47:20.375Z",
+      "status": "failed",
+      "error": "Bridge 500 Internal Server Error: {\"error\":\"internal_error\",\"message\":\"Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8081/\\nCall log:\\n\\u001b[2m  - navigating to \\\"http://localhost:8081/\\\", waiting until \\\"load\\\"\\u001b[22m\\n\"}",
+      "artifacts": {
+        "screenshotPath": "C:\\work\\open_code_orchestrator\\browser_operator\\artifacts\\project01-smoke\\user-task-chat\\failure.png",
+        "consolePath": "C:\\work\\open_code_orchestrator\\browser_operator\\artifacts\\project01-smoke\\user-task-chat\\failure.console.json",
+        "networkPath": "C:\\work\\open_code_orchestrator\\browser_operator\\artifacts\\project01-smoke\\user-task-chat\\failure.network.json"
+      }
+    },
+    {
+      "name": "admin-broadcast",
+      "startedAt": "2026-04-22T11:47:20.469Z",
+      "steps": [
+        {
+          "name": "open-login-page",
+          "status": "failed",
+          "startedAt": "2026-04-22T11:47:20.668Z",
+          "finishedAt": "2026-04-22T11:47:23.066Z",
+          "error": "Bridge 500 Internal Server Error: {\"error\":\"internal_error\",\"message\":\"Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8081/\\nCall log:\\n\\u001b[2m  - navigating to \\\"http://localhost:8081/\\\", waiting until \\\"load\\\"\\u001b[22m\\n\"}"
+        }
+      ],
+      "finishedAt": "2026-04-22T11:47:23.144Z",
+      "status": "failed",
+      "error": "Bridge 500 Internal Server Error: {\"error\":\"internal_error\",\"message\":\"Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8081/\\nCall log:\\n\\u001b[2m  - navigating to \\\"http://localhost:8081/\\\", waiting until \\\"load\\\"\\u001b[22m\\n\"}",
+      "artifacts": {
+        "screenshotPath": "C:\\work\\open_code_orchestrator\\browser_operator\\artifacts\\project01-smoke\\admin-broadcast\\failure.png",
+        "consolePath": "C:\\work\\open_code_orchestrator\\browser_operator\\artifacts\\project01-smoke\\admin-broadcast\\failure.console.json",
+        "networkPath": "C:\\work\\open_code_orchestrator\\browser_operator\\artifacts\\project01-smoke\\admin-broadcast\\failure.network.json"
+      }
+    }
+  ],
+  "visualizerImport": {
+    "enabled": true,
+    "exitCode": 0,
+    "stdout": "Imported browser smoke report: 43923506-5f42-4281-939c-0c133862e49a\r\ntarget_url=http://localhost:8081\r\npassed=0 failed=3 scenarios=3",
+    "stderr": "",
+    "ok": true
+  }
+}

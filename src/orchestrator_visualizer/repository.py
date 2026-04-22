@@ -6,7 +6,9 @@ from datetime import datetime
 
 from .config import VisualizerConfig
 from .db import connect, init_db
-from .models import ApprovalRecord, EventRecord, FileImpactRecord, RunRecord, VerificationRecord
+from pathlib import Path
+
+from .models import ApprovalRecord, BrowserSmokeReportRecord, EventRecord, FileImpactRecord, RunRecord, VerificationRecord
 from .repository_types import FileImpactAggregate, RunSummary
 
 
@@ -137,6 +139,43 @@ class VisualizerRepository:
             )
             conn.commit()
 
+    def upsert_browser_smoke_report(self, report: BrowserSmokeReportRecord) -> None:
+        with connect(self.config) as conn:
+            conn.execute(
+                """
+                insert into browser_smoke_reports (report_id, source_path, target_url, started_at, finished_at, total, passed, failed, report_json)
+                values (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                on conflict(report_id) do update set
+                    source_path=excluded.source_path,
+                    target_url=excluded.target_url,
+                    started_at=excluded.started_at,
+                    finished_at=excluded.finished_at,
+                    total=excluded.total,
+                    passed=excluded.passed,
+                    failed=excluded.failed,
+                    report_json=excluded.report_json
+                """,
+                (
+                    report.report_id,
+                    report.source_path,
+                    report.target_url,
+                    _iso(report.started_at),
+                    _iso(report.finished_at),
+                    report.total,
+                    report.passed,
+                    report.failed,
+                    json.dumps(report.model_dump(mode="json"), ensure_ascii=True),
+                ),
+            )
+            conn.commit()
+
+    def import_browser_smoke_report_file(self, file_path: str | Path) -> BrowserSmokeReportRecord:
+        path = Path(file_path)
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        report = BrowserSmokeReportRecord.model_validate({**payload, "sourcePath": str(path)})
+        self.upsert_browser_smoke_report(report)
+        return report
+
     def list_runs(self) -> list[RunSummary]:
         with connect(self.config) as conn:
             rows = conn.execute(
@@ -156,6 +195,17 @@ class VisualizerRepository:
                 """
             ).fetchall()
         return [RunSummary.model_validate(dict(row)) for row in rows]
+
+    def list_browser_smoke_reports(self) -> list[BrowserSmokeReportRecord]:
+        with connect(self.config) as conn:
+            rows = conn.execute(
+                "select report_json from browser_smoke_reports order by finished_at desc, started_at desc"
+            ).fetchall()
+        return [BrowserSmokeReportRecord.model_validate(json.loads(row["report_json"])) for row in rows]
+
+    def latest_browser_smoke_report(self) -> BrowserSmokeReportRecord | None:
+        reports = self.list_browser_smoke_reports()
+        return reports[0] if reports else None
 
     def get_run(self, run_id: str) -> RunRecord | None:
         with connect(self.config) as conn:

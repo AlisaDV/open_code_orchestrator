@@ -13,6 +13,7 @@ Monorepo for the Python orchestration layer plus numbered verification projects.
 
 - `docs/monorepo-structure.md`
 - `docs/delivery-roadmap.md`
+- `docs/agent-connection-playbook.md`
 - `projects/01-task-support-app/docs/architecture.md`
 - `projects/01-task-support-app/docs/erd.mmd`
 - `projects/01-task-support-app/docs/processes.mmd`

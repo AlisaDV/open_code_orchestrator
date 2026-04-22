@@ -14,6 +14,15 @@ async function fetchJson(url) {
   return response.json();
 }
 
+async function fetchJsonOptional(url) {
+  const response = await fetch(url)
+  if (response.status === 404) return null
+  if (!response.ok) {
+    throw new Error(`${response.status} ${response.statusText}`)
+  }
+  return response.json()
+}
+
 function fmt(value) {
   if (!value) return '-';
   return new Date(value).toLocaleString();
@@ -26,6 +35,12 @@ function escapeHtml(value) {
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#039;');
+}
+
+function toFileUrl(filePath) {
+  if (!filePath) return null;
+  const normalized = String(filePath).replaceAll('\\', '/');
+  return `file:///${normalized}`;
 }
 
 function renderRuns() {
@@ -53,6 +68,49 @@ function renderRuns() {
       </div>
     </article>
   `).join('');
+}
+
+function renderBrowserSmoke(report) {
+  const host = document.getElementById('browser-smoke-summary')
+  if (!report) {
+    host.innerHTML = '<div class="empty">No browser smoke report imported yet.</div>'
+    return
+  }
+
+  host.innerHTML = `
+    <article class="item">
+      <div class="kv">
+        <strong>${escapeHtml(report.target_url)}</strong>
+        <span class="small muted">started: ${fmt(report.started_at)} | finished: ${fmt(report.finished_at)}</span>
+        <span class="small">total: ${report.total} | passed: ${report.passed} | failed: ${report.failed}</span>
+      </div>
+      <div class="run-chip-row">
+        ${(report.scenarios || []).map((scenario) => `<span class="pill">${escapeHtml(scenario.scenario_name)}: ${escapeHtml(scenario.status)}</span>`).join('')}
+      </div>
+      <div class="list" style="margin-top: 12px;">
+        ${(report.scenarios || []).map((scenario) => {
+          const screenshot = toFileUrl(scenario.artifacts?.successScreenshot || scenario.artifacts?.screenshotPath)
+          const consoleLink = toFileUrl(scenario.artifacts?.console || scenario.artifacts?.consolePath)
+          const networkLink = toFileUrl(scenario.artifacts?.network || scenario.artifacts?.networkPath)
+          return `
+            <article class="item">
+              <div class="kv">
+                <strong>${escapeHtml(scenario.scenario_name)}</strong>
+                <span class="small">status: ${escapeHtml(scenario.status)}</span>
+                <span class="small muted">started: ${fmt(scenario.started_at)} | finished: ${fmt(scenario.finished_at)}</span>
+                ${scenario.error ? `<pre>${escapeHtml(scenario.error)}</pre>` : ''}
+              </div>
+              <div class="artifact-links">
+                ${screenshot ? `<a href="${screenshot}" target="_blank" rel="noreferrer">screenshot</a>` : ''}
+                ${consoleLink ? `<a href="${consoleLink}" target="_blank" rel="noreferrer">console</a>` : ''}
+                ${networkLink ? `<a href="${networkLink}" target="_blank" rel="noreferrer">network</a>` : ''}
+              </div>
+            </article>
+          `
+        }).join('')}
+      </div>
+    </article>
+  `
 }
 
 function renderRunSummary(run, events, files, approvals, verification) {
@@ -260,6 +318,11 @@ async function loadRuns() {
   renderRuns();
 }
 
+async function loadBrowserSmoke() {
+  const report = await fetchJsonOptional('/browser-smoke/latest')
+  renderBrowserSmoke(report)
+}
+
 async function loadRunDetails(runId) {
   const [run, events, files, approvals, verification] = await Promise.all([
     fetchJson(`/runs/${runId}`),
@@ -288,6 +351,7 @@ document.body.addEventListener('click', async (event) => {
 
 document.getElementById('refresh-button').addEventListener('click', async () => {
   await loadRuns();
+  await loadBrowserSmoke();
   if (state.selectedRun?.run_id) {
     await loadRunDetails(state.selectedRun.run_id);
   }
@@ -305,6 +369,7 @@ document.getElementById('timeline-status-filter').addEventListener('change', (ev
 
 (async function init() {
   await loadRuns();
+  await loadBrowserSmoke();
   if (state.runs[0]) {
     await loadRunDetails(state.runs[0].run_id);
   }

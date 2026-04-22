@@ -7,6 +7,10 @@ __pycache__/
 *.db
 *.zip
 tmp_visualizer_demo.txt
+browser_operator/node_modules/
+browser_operator/.playwright/
+browser_operator/playwright-report/
+browser_operator/test-results/
 
 projects/
 

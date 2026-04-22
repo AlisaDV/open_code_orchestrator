@@ -55,6 +55,10 @@ body { margin: 0; font-family: Arial, sans-serif; background: linear-gradient(18
 .graph-node { border-left: 4px solid var(--accent); }
 .graph-edge { border-left: 4px solid var(--accent-2); }
 .node-type { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+.divider { height: 1px; background: var(--line); margin: 18px 0; }
+.artifact-links { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.artifact-links a { color: var(--accent); text-decoration: none; font-size: 12px; }
+.artifact-links a:hover { text-decoration: underline; }
 pre { margin: 8px 0 0; white-space: pre-wrap; word-break: break-word; color: #cbd7ea; font-size: 12px; }
 
 @media (max-width: 1100px) {

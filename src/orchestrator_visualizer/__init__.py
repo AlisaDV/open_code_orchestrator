@@ -1,6 +1,9 @@
 from .config import VisualizerConfig
 from .models import (
     ApprovalRecord,
+    BrowserSmokeReportRecord,
+    BrowserSmokeScenarioRecord,
+    BrowserSmokeStepRecord,
     EventRecord,
     EventType,
     FileImpactRecord,
@@ -15,6 +18,9 @@ from .repository import VisualizerRepository
 
 __all__ = [
     "ApprovalRecord",
+    "BrowserSmokeReportRecord",
+    "BrowserSmokeScenarioRecord",
+    "BrowserSmokeStepRecord",
     "EventRecord",
     "EventType",
     "FileImpactRecord",

@@ -71,6 +71,19 @@ create table if not exists verification_results (
   ts text not null,
   foreign key (run_id) references runs(run_id)
 );
+
+create table if not exists browser_smoke_reports (
+  report_id text primary key,
+  source_path text,
+  target_url text not null,
+  started_at text,
+  finished_at text,
+  total integer not null,
+  passed integer not null,
+  failed integer not null,
+  report_json text not null
+);
+create index if not exists idx_browser_smoke_reports_finished_at on browser_smoke_reports(finished_at);
 """
 
 

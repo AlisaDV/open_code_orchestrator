@@ -5,7 +5,7 @@ from enum import StrEnum
 from typing import Any
 from uuid import uuid4
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 def utc_now() -> datetime:
@@ -122,3 +122,41 @@ class VerificationRecord(BaseModel):
     duration_ms: int | None = None
     details: dict[str, Any] = Field(default_factory=dict)
     ts: datetime = Field(default_factory=utc_now)
+
+
+class BrowserSmokeStepRecord(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    step_name: str = Field(validation_alias="name")
+    status: str
+    started_at: datetime | None = Field(default=None, validation_alias="startedAt")
+    finished_at: datetime | None = Field(default=None, validation_alias="finishedAt")
+    details: dict[str, Any] | str | None = None
+    error: str | None = None
+
+
+class BrowserSmokeScenarioRecord(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    scenario_name: str = Field(validation_alias="name")
+    status: str
+    started_at: datetime | None = Field(default=None, validation_alias="startedAt")
+    finished_at: datetime | None = Field(default=None, validation_alias="finishedAt")
+    result: dict[str, Any] = Field(default_factory=dict)
+    artifacts: dict[str, Any] = Field(default_factory=dict)
+    error: str | None = None
+    steps: list[BrowserSmokeStepRecord] = Field(default_factory=list)
+
+
+class BrowserSmokeReportRecord(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    report_id: str = Field(default_factory=lambda: str(uuid4()))
+    source_path: str | None = Field(default=None, validation_alias="sourcePath")
+    target_url: str = Field(validation_alias="targetUrl")
+    started_at: datetime | None = Field(default=None, validation_alias="startedAt")
+    finished_at: datetime | None = Field(default=None, validation_alias="finishedAt")
+    total: int = 0
+    passed: int = 0
+    failed: int = 0
+    scenarios: list[BrowserSmokeScenarioRecord] = Field(default_factory=list)
