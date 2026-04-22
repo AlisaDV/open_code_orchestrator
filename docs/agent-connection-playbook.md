@@ -172,6 +172,34 @@ GET /browser-smoke/latest
 - specialist живет как отдельный knowledge/execution module;
 - orchestrator делегирует в него задачи по доменной области.
 
+Пример готового specialist-модуля в этом репозитории:
+
+- `src/bitrix24_agent/`
+
+Для orchestrator specialist подключается через `enabled_specialists`.
+
+Пример на Python:
+
+```python
+from opencode_orchestrator import OrchestratorConfig, run_orchestrator
+
+config = OrchestratorConfig(
+    workspace=r"C:\work\my-project",
+    objective="Подготовить интеграцию с Bitrix24",
+    enabled_specialists=["bitrix24"],
+)
+
+result = run_orchestrator(config)
+```
+
+После этого manager agent получает specialist tools:
+
+- `bitrix24_manifest`
+- `bitrix24_consult`
+- `bitrix24_generate`
+- `bitrix24_debug`
+- `bitrix24_execute`
+
 ## Рекомендуемая структура для нового проекта
 
 Если проект хранится в том же репозитории:

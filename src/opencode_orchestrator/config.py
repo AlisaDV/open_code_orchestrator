@@ -49,6 +49,7 @@ class OrchestratorConfig(BaseModel):
     session_history_limit: int | None = Field(default=80, ge=1)
     current_run_id: str | None = Field(default=None)
     visualizer_enabled: bool = Field(default=True)
+    enabled_specialists: list[str] = Field(default_factory=list)
     approval_mode: ApprovalMode = Field(default="write_run")
     approval_state_path: Path = Field(default=Path(".opencode_orchestrator/pending_state.json"))
     blocked_command_patterns: list[str] = Field(default_factory=lambda: list(DEFAULT_BLOCKED_COMMAND_PATTERNS))

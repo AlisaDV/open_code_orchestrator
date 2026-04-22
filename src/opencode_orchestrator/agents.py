@@ -4,6 +4,7 @@ from agents import Agent
 
 from .config import OrchestratorConfig
 from .reporting import OrchestratorReport
+from .specialists import build_specialist_tools
 from .tools import build_tools
 
 
@@ -63,6 +64,7 @@ def build_specialists(config: OrchestratorConfig) -> dict[str, Agent]:
 
 def build_orchestrator(config: OrchestratorConfig) -> Agent:
     specialists = build_specialists(config)
+    specialist_tools = build_specialist_tools(config)
     return Agent(
         name="OpenCode Orchestrator",
         model=config.model,
@@ -90,6 +92,7 @@ def build_orchestrator(config: OrchestratorConfig) -> Agent:
                 tool_name="delegate_to_runner",
                 tool_description="Run the project or reproduction command and summarize runtime behavior.",
             ),
+            *specialist_tools,
             *build_tools(config),
         ],
     )

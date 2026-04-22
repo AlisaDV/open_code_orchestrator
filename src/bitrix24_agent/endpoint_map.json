@@ -1,0 +1,138 @@
+{
+  "auth": {
+    "webhook": {
+      "docs": [
+        "knowledge/auth.md"
+      ],
+      "notes": [
+        "Use incoming webhook for personal or simple server-side integrations.",
+        "Webhook URL format: https://<portal>/rest/<user_id>/<webhook_code>/<method>.json"
+      ]
+    },
+    "oauth": {
+      "authorize_url": "https://<portal>/oauth/authorize/?client_id=<client_id>&state=<state>",
+      "token_url": "https://oauth.bitrix24.tech/oauth/token/",
+      "grant_types": [
+        "authorization_code",
+        "refresh_token"
+      ]
+    }
+  },
+  "crm": {
+    "preferred_universal_methods": [
+      "crm.item.add",
+      "crm.item.update",
+      "crm.item.get",
+      "crm.item.list",
+      "crm.item.fields"
+    ],
+    "specialized_families": [
+      "crm.deal.*",
+      "crm.lead.*",
+      "crm.contact.*",
+      "crm.company.*",
+      "crm.quote.*"
+    ],
+    "reference_ids": [
+      "entityTypeId",
+      "id",
+      "categoryId",
+      "stageId"
+    ]
+  },
+  "user": {
+    "methods": [
+      "user.add",
+      "user.update",
+      "user.current",
+      "user.get",
+      "user.search",
+      "user.fields"
+    ],
+    "scopes": [
+      "user_brief",
+      "user_basic",
+      "user"
+    ]
+  },
+  "tasks": {
+    "core_methods": [
+      "tasks.task.add",
+      "tasks.task.update",
+      "tasks.task.get",
+      "tasks.task.list",
+      "tasks.task.delete",
+      "tasks.task.files.attach",
+      "tasks.task.delegate",
+      "tasks.task.complete"
+    ],
+    "related_methods": [
+      "task.checklistitem.*",
+      "task.elapseditem.*",
+      "task.dependence.*",
+      "task.item.userfield.*"
+    ]
+  },
+  "chats": {
+    "core_methods": [
+      "im.chat.add",
+      "im.chat.get",
+      "im.dialog.get",
+      "im.chat.user.add",
+      "im.chat.user.delete",
+      "im.message.add",
+      "im.dialog.messages.get",
+      "im.dialog.read"
+    ],
+    "new_api_methods": [
+      "im.v2.File.upload",
+      "im.v2.File.download",
+      "im.v2.Event.subscribe",
+      "im.v2.Event.get"
+    ]
+  },
+  "telephony": {
+    "external": [
+      "telephony.externalLine.add",
+      "telephony.externalCall.searchCrmEntities",
+      "telephony.externalCall.register",
+      "telephony.externalCall.show",
+      "telephony.externalCall.finish",
+      "telephony.externalCall.attachRecord",
+      "telephony.call.attachTranscription"
+    ],
+    "voximplant": [
+      "voximplant.sip.add",
+      "voximplant.sip.get",
+      "voximplant.line.get",
+      "voximplant.user.get"
+    ]
+  },
+  "disk": {
+    "storage": [
+      "disk.storage.get",
+      "disk.storage.getlist",
+      "disk.storage.uploadfile",
+      "disk.storage.getforapp"
+    ],
+    "folder": [
+      "disk.folder.getchildren",
+      "disk.folder.addsubfolder",
+      "disk.folder.uploadfile",
+      "disk.folder.getexternallink"
+    ],
+    "file": [
+      "disk.file.get",
+      "disk.file.rename",
+      "disk.file.uploadversion",
+      "disk.file.getExternalLink"
+    ]
+  },
+  "cross_links": {
+    "task_to_crm": "UF_CRM_TASK",
+    "task_to_disk": "UF_TASK_WEBDAV_FILES",
+    "telephony_to_crm": "telephony.externalCall.searchCrmEntities",
+    "chat_to_user": "im.user.*",
+    "disk_to_chat": "im.message.add or im.v2.File.*"
+  }
+}
