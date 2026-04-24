@@ -47,6 +47,17 @@ class ProjectAgentProfile(BaseModel):
         self.workspace = self.workspace.expanduser().resolve()
         return self
 
+    def integration(self, name: str) -> ProjectProfileIntegrationConfig | None:
+        return self.integrations.get(name)
+
+    def browser_summary(self) -> dict[str, str | bool | None]:
+        return {
+            "browser_smoke": self.browser_smoke,
+            "operator_url": self.browser.operator_url,
+            "headless": self.browser.headless,
+            "smoke_script": self.browser.smoke_script,
+        }
+
 
 def load_project_agent_profile(path: str | Path) -> ProjectAgentProfile:
     profile_path = Path(path).expanduser().resolve()

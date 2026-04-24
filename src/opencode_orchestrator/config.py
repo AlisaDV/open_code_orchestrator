@@ -92,6 +92,16 @@ class OrchestratorConfig(BaseModel):
     def requires_run_approval(self) -> bool:
         return self.approval_mode in {"run", "write_run"}
 
+    def integration_settings(self, name: str):
+        if not self.project_profile:
+            return None
+        return self.project_profile.integration(name)
+
+    def browser_settings(self) -> dict[str, str | bool | None]:
+        if not self.project_profile:
+            return {}
+        return self.project_profile.browser_summary()
+
     @classmethod
     def from_project_profile(
         cls,

@@ -21,7 +21,14 @@ def build_specialist_tools(config: OrchestratorConfig):
 
     from bitrix24_agent import Bitrix24AgentRuntime, Bitrix24Config, Bitrix24MethodRequest
 
-    runtime = Bitrix24AgentRuntime(Bitrix24Config(workspace=config.workspace))
+    integration_settings = config.integration_settings("bitrix24")
+    bitrix_config = Bitrix24Config(
+        workspace=config.workspace,
+        auth_mode=integration_settings.auth_mode if integration_settings and integration_settings.auth_mode else "webhook",
+        allow_live_requests=integration_settings.allow_live_requests if integration_settings else False,
+    )
+
+    runtime = Bitrix24AgentRuntime(bitrix_config)
 
     def _parse_params(params_json: str) -> dict:
         if not params_json.strip():
@@ -71,6 +78,8 @@ def build_specialist_tools(config: OrchestratorConfig):
             **BITRIX24_AGENT_MANIFEST,
             "available_specialists": list_available_specialists(),
             "workspace": str(Path(config.workspace)),
+            "integration_settings": integration_settings.model_dump(by_alias=True) if integration_settings else None,
+            "browser_settings": config.browser_settings() if config.project_profile else None,
         }
         return json.dumps(payload, indent=2, ensure_ascii=True)
 

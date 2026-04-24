@@ -153,6 +153,20 @@ set PROJECT01_URL=http://localhost:8081
 npm run smoke:project01
 ```
 
+Если `project.agent.json` заполнен, orchestration stack может собрать browser smoke invocation автоматически из полей:
+
+- `browserSmoke`
+- `baseUrl`
+- `browser.operatorUrl`
+- `browser.smokeScript`
+
+По умолчанию launcher ищет `browser_operator/`:
+
+1. внутри `workspace`
+2. рядом с `workspace`
+
+Если проект внешний и `browser_operator` живет в orchestration-репозитории, нужно либо запускать smoke из самого orchestration stack, либо позже добавить явное поле для пути к browser operator.
+
 При успешной настройке smoke-run должен:
 
 - открыть UI проекта;
@@ -219,6 +233,20 @@ result = run_orchestrator(config)
 - `bitrix24_generate`
 - `bitrix24_debug`
 - `bitrix24_execute`
+
+Если в `project.agent.json` задан блок:
+
+```json
+"integrations": {
+  "bitrix24": {
+    "mode": "consult",
+    "allowLiveRequests": false,
+    "authMode": "webhook"
+  }
+}
+```
+
+то specialist runtime автоматически подхватит эти настройки при загрузке профиля проекта.
 
 ## Рекомендуемая структура для нового проекта
 
