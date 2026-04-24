@@ -6,6 +6,8 @@ from typing import Literal
 
 from pydantic import BaseModel, Field, model_validator
 
+from .project_profile import ProjectAgentProfile
+
 
 DEFAULT_BLOCKED_COMMAND_PATTERNS = [
     r"\brm\b",
@@ -50,6 +52,7 @@ class OrchestratorConfig(BaseModel):
     current_run_id: str | None = Field(default=None)
     visualizer_enabled: bool = Field(default=True)
     enabled_specialists: list[str] = Field(default_factory=list)
+    project_profile: ProjectAgentProfile | None = Field(default=None)
     approval_mode: ApprovalMode = Field(default="write_run")
     approval_state_path: Path = Field(default=Path(".opencode_orchestrator/pending_state.json"))
     blocked_command_patterns: list[str] = Field(default_factory=lambda: list(DEFAULT_BLOCKED_COMMAND_PATTERNS))
@@ -88,3 +91,24 @@ class OrchestratorConfig(BaseModel):
     @property
     def requires_run_approval(self) -> bool:
         return self.approval_mode in {"run", "write_run"}
+
+    @classmethod
+    def from_project_profile(
+        cls,
+        profile: ProjectAgentProfile,
+        *,
+        objective: str,
+        model: str = "gpt-5.4",
+    ) -> "OrchestratorConfig":
+        return cls(
+            workspace=profile.workspace,
+            objective=objective,
+            model=model,
+            allow_write=not profile.orchestrator.read_only,
+            max_turns=profile.orchestrator.max_turns,
+            session_id=profile.orchestrator.session_id,
+            visualizer_enabled=profile.visualizer,
+            enabled_specialists=profile.specialists,
+            approval_mode=profile.orchestrator.approval_mode,
+            project_profile=profile,
+        )

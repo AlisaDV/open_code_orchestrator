@@ -1,0 +1,41 @@
+{
+  "name": "my-project",
+  "workspace": "C:/work/my-project",
+  "baseUrl": "http://localhost:3000",
+  "runCommand": "npm run dev",
+  "api": true,
+  "ui": true,
+  "databaseRequired": true,
+  "browserSmoke": true,
+  "visualizer": true,
+  "orchestrator": {
+    "sessionId": "my-project-session",
+    "approvalMode": "write_run",
+    "maxTurns": 20,
+    "readOnly": false
+  },
+  "browser": {
+    "operatorUrl": "http://127.0.0.1:8790",
+    "headless": true,
+    "smokeScript": "npm run smoke:project01"
+  },
+  "specialists": [
+    "bitrix24"
+  ],
+  "integrations": {
+    "bitrix24": {
+      "mode": "consult",
+      "allowLiveRequests": false,
+      "authMode": "webhook"
+    }
+  },
+  "criticalScenarios": [
+    "login",
+    "create-order",
+    "admin-approval"
+  ],
+  "notes": [
+    "Use browser smoke for UI regressions.",
+    "Do not enable live Bitrix24 execution until credentials are configured explicitly."
+  ]
+}

@@ -25,6 +25,18 @@
 
 ## Подключение к новому проекту
 
+### Профиль проекта
+
+Рекомендуемый файл в корне проекта:
+
+```text
+project.agent.json
+```
+
+Готовый пример лежит в репозитории:
+
+- `docs/project.agent.example.json`
+
 ### Шаг 1. Определить тип проекта
 
 Нужно зафиксировать:
@@ -63,6 +75,14 @@
 
 ```bash
 opencode-orchestrator "Проверить проект, прогнать тесты и обновить документацию" --workspace C:\path\to\project
+```
+
+Если в проекте уже лежит `project.agent.json`, CLI может подхватить его автоматически по `--workspace`.
+
+Явно указать профиль можно так:
+
+```bash
+opencode-orchestrator "Проверить проект" --project-profile C:\path\to\project.agent.json
 ```
 
 Если нужен persistent context:

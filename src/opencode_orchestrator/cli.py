@@ -5,6 +5,7 @@ from pathlib import Path
 
 from .config import ApprovalMode, OrchestratorConfig
 from .orchestrator import load_pending_approvals, resume_orchestrator, run_orchestrator
+from .project_profile import find_project_agent_profile, load_project_agent_profile
 
 
 def _parse_index_list(raw: str | None) -> set[int]:
@@ -39,6 +40,11 @@ def _prompt_for_decisions(approvals: list[object]) -> tuple[set[int], set[int]]:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Run the OpenCode multi-agent orchestrator.")
     parser.add_argument("objective", nargs="?", help="Goal for the orchestrator to complete.")
+    parser.add_argument(
+        "--project-profile",
+        type=Path,
+        help="Path to project.agent.json. If omitted, the CLI will auto-discover it from --workspace.",
+    )
     parser.add_argument(
         "--workspace",
         type=Path,
@@ -118,6 +124,28 @@ def build_parser() -> argparse.ArgumentParser:
 
 def _build_config(args: argparse.Namespace) -> OrchestratorConfig:
     objective = args.objective or "Resume interrupted orchestrator run"
+    profile_path = args.project_profile or find_project_agent_profile(args.workspace)
+    if profile_path:
+        profile = load_project_agent_profile(profile_path)
+        config = OrchestratorConfig.from_project_profile(
+            profile,
+            objective=objective,
+            model=args.model,
+        )
+        return config.model_copy(
+            update={
+                "workspace": args.workspace if args.workspace != Path.cwd() else profile.workspace,
+                "allow_write": not args.read_only,
+                "max_turns": args.max_turns,
+                "command_timeout_seconds": args.command_timeout_seconds,
+                "session_id": args.session_id or config.session_id,
+                "session_db_path": args.session_db_path,
+                "session_history_limit": args.session_history_limit,
+                "approval_mode": args.approval_mode,
+                "approval_state_path": args.approval_state_path,
+            }
+        )
+
     return OrchestratorConfig(
         workspace=args.workspace,
         objective=objective,
