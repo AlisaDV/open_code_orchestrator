@@ -4,6 +4,7 @@ from agents import RunConfig, Runner, SessionSettings, SQLiteSession, ToolErrorF
 
 from .agents import build_orchestrator
 from .approval import apply_approval_decisions, load_run_state_sync, save_run_state, serialize_interruptions
+from .browser_smoke import run_browser_smoke
 from .config import OrchestratorConfig
 from .reporting import OrchestratorOutcome, OrchestratorReport
 
@@ -57,6 +58,38 @@ def _normalize_final_output(config: OrchestratorConfig, final_output: object) ->
         summary=str(final_output),
         evidence=["Final output was not returned as structured data; wrapped as fallback text."],
     )
+
+
+def _attach_browser_smoke_result(config: OrchestratorConfig, outcome: OrchestratorOutcome) -> OrchestratorOutcome:
+    if outcome.status != "completed" or outcome.report is None:
+        return outcome
+    if not config.project_profile or not config.project_profile.browser_smoke:
+        return outcome
+
+    smoke = run_browser_smoke(config, dry_run=False)
+    report = outcome.report.model_copy(deep=True)
+
+    if not smoke.get("enabled"):
+        report.next_steps.append("Browser smoke profile is present but no executable smoke script was available.")
+        return outcome.model_copy(update={"report": report})
+
+    command = smoke.get("command")
+    workdir = smoke.get("workdir")
+    exit_code = smoke.get("exit_code")
+    report.evidence.append(
+        f"Browser smoke invoked: command={command!r}, workdir={workdir!r}, exit_code={exit_code!r}"
+    )
+    if exit_code == 0:
+        report.completed.append("Browser smoke scenarios completed successfully after orchestrator run.")
+    else:
+        report.risks.append("Browser smoke scenarios failed after orchestrator run.")
+        stderr = (smoke.get("stderr") or "").strip()
+        stdout = (smoke.get("stdout") or "").strip()
+        if stderr:
+            report.risks.append(f"Browser smoke stderr: {stderr[:500]}")
+        elif stdout:
+            report.risks.append(f"Browser smoke output: {stdout[:500]}")
+    return outcome.model_copy(update={"report": report})
 
 
 def _result_to_outcome(config: OrchestratorConfig, result: object) -> OrchestratorOutcome:
@@ -129,7 +162,8 @@ def run_orchestrator(config: OrchestratorConfig) -> OrchestratorOutcome:
         session=build_session(config),
         run_config=build_run_config(config),
     )
-    return _result_to_outcome(config, result)
+    outcome = _result_to_outcome(config, result)
+    return _attach_browser_smoke_result(config, outcome)
 
 
 def resume_orchestrator(
@@ -188,7 +222,8 @@ def resume_orchestrator(
         session=build_session(config),
         run_config=build_run_config(config),
     )
-    return _result_to_outcome(config, result)
+    outcome = _result_to_outcome(config, result)
+    return _attach_browser_smoke_result(config, outcome)
 
 
 def load_pending_approvals(config: OrchestratorConfig):

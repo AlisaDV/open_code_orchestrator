@@ -174,6 +174,8 @@ npm run smoke:project01
 - записать `report.json`;
 - автоматически импортировать результат в visualizer.
 
+Если orchestrator запущен с `project.agent.json`, browser smoke может быть вызван автоматически как post-run шаг после завершенного orchestration run.
+
 ### Шаг 6. Проверить auto-import в visualizer
 
 После smoke-run visualizer должен видеть latest browser smoke report.
