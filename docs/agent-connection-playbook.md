@@ -199,6 +199,14 @@ GET /browser-smoke/latest
 Пример:
 
 - `bitrix24_agent`
+- `reviewer_agent`
+- `security_agent`
+- `database_agent`
+- `devops_agent`
+- `observability_agent`
+- `api_integration_agent`
+- `frontend_ui_agent`
+- `triage_agent`
 - `telegram_agent`
 - `amo_agent`
 
