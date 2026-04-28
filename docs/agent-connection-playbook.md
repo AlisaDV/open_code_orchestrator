@@ -207,6 +207,10 @@ GET /browser-smoke/latest
 - `api_integration_agent`
 - `frontend_ui_agent`
 - `triage_agent`
+- `data_sync_agent`
+- `business_rules_agent`
+- `release_agent`
+- `migration_agent`
 - `telegram_agent`
 - `amo_agent`
 

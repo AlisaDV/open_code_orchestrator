@@ -11,7 +11,7 @@ from .config import OrchestratorConfig
 
 
 def list_available_specialists() -> list[str]:
-    return ["bitrix24", "reviewer", "security", "database", "devops", "observability", "api_integration", "frontend_ui", "triage"]
+    return ["bitrix24", "reviewer", "security", "database", "devops", "observability", "api_integration", "frontend_ui", "triage", "data_sync", "business_rules", "release", "migration"]
 
 
 def build_specialist_tools(config: OrchestratorConfig):
@@ -559,6 +559,248 @@ def build_specialist_tools(config: OrchestratorConfig):
             triage_consult,
             triage_generate,
             triage_debug,
+        ])
+
+    if normalized.intersection({"data_sync", "data-sync", "sync", "data_sync_agent"}):
+        from data_sync_agent import DATA_SYNC_AGENT_MANIFEST, DataSyncAgentRuntime, DataSyncReviewRequest
+
+        runtime = DataSyncAgentRuntime()
+
+        @function_tool
+        def data_sync_manifest() -> str:
+            """Return the local data sync specialist manifest and connection notes."""
+            payload = {
+                **DATA_SYNC_AGENT_MANIFEST,
+                "available_specialists": list_available_specialists(),
+                "workspace": str(Path(config.workspace)),
+            }
+            return json.dumps(payload, indent=2, ensure_ascii=True)
+
+        @function_tool
+        def data_sync_consult(
+            query: Annotated[str, Field(description="Question about import/export, checkpoints, deduplication, or reconciliation")],
+        ) -> str:
+            """Consult sync design and recovery heuristics."""
+            return runtime.consult(query).model_dump_json(indent=2)
+
+        @function_tool
+        def data_sync_generate(
+            summary: Annotated[str, Field(description="Short summary of the sync-sensitive change")],
+            files_json: Annotated[str, Field(description="JSON array string of changed files")],
+            changed_areas_json: Annotated[str, Field(description="JSON array string of changed areas or modules")],
+            import_flow: Annotated[bool, Field(description="Whether import flow changed")],
+            export_flow: Annotated[bool, Field(description="Whether export flow changed")],
+            checkpointing_present: Annotated[bool, Field(description="Whether checkpoint/resume markers exist")],
+            dedup_logic_present: Annotated[bool, Field(description="Whether deduplication or idempotency logic exists")],
+            reconciliation_present: Annotated[bool, Field(description="Whether reconciliation or drift detection exists")],
+            notes_json: Annotated[str, Field(description="JSON array string of extra notes or assumptions")],
+        ) -> str:
+            """Generate data sync findings scaffold for a change set."""
+            request = DataSyncReviewRequest(
+                summary=summary,
+                files=json.loads(files_json) if files_json.strip() else [],
+                changed_areas=json.loads(changed_areas_json) if changed_areas_json.strip() else [],
+                import_flow=import_flow,
+                export_flow=export_flow,
+                checkpointing_present=checkpointing_present,
+                dedup_logic_present=dedup_logic_present,
+                reconciliation_present=reconciliation_present,
+                notes=json.loads(notes_json) if notes_json.strip() else [],
+            )
+            return runtime.generate(request).model_dump_json(indent=2)
+
+        @function_tool
+        def data_sync_debug(
+            problem: Annotated[str, Field(description="Sync bug, duplicate processing, drift, or recovery issue to analyze")],
+        ) -> str:
+            """Analyze likely stateful sync causes of a data pipeline issue."""
+            return runtime.debug(problem).model_dump_json(indent=2)
+
+        tools.extend([
+            data_sync_manifest,
+            data_sync_consult,
+            data_sync_generate,
+            data_sync_debug,
+        ])
+
+    if normalized.intersection({"business_rules", "business-rules", "rules", "business_rules_agent"}):
+        from business_rules_agent import BUSINESS_RULES_AGENT_MANIFEST, BusinessRuleReviewRequest, BusinessRulesAgentRuntime
+
+        runtime = BusinessRulesAgentRuntime()
+
+        @function_tool
+        def business_rules_manifest() -> str:
+            """Return the local business-rules specialist manifest and connection notes."""
+            payload = {
+                **BUSINESS_RULES_AGENT_MANIFEST,
+                "available_specialists": list_available_specialists(),
+                "workspace": str(Path(config.workspace)),
+            }
+            return json.dumps(payload, indent=2, ensure_ascii=True)
+
+        @function_tool
+        def business_rules_consult(
+            query: Annotated[str, Field(description="Question about domain invariants, approvals, lifecycle rules, or process semantics")],
+        ) -> str:
+            """Consult domain-process and business-rule review heuristics."""
+            return runtime.consult(query).model_dump_json(indent=2)
+
+        @function_tool
+        def business_rules_generate(
+            summary: Annotated[str, Field(description="Short summary of the business-rule-sensitive change")],
+            files_json: Annotated[str, Field(description="JSON array string of changed files")],
+            changed_areas_json: Annotated[str, Field(description="JSON array string of changed areas or modules")],
+            state_transition_changed: Annotated[bool, Field(description="Whether lifecycle/state transitions changed")],
+            approval_logic_changed: Annotated[bool, Field(description="Whether approval or delegation logic changed")],
+            cross_entity_consistency_changed: Annotated[bool, Field(description="Whether related business entities may go out of sync")],
+            external_business_process_changed: Annotated[bool, Field(description="Whether an external system mapping or process changed")],
+            notes_json: Annotated[str, Field(description="JSON array string of extra notes or assumptions")],
+        ) -> str:
+            """Generate business-rules findings scaffold for a change set."""
+            request = BusinessRuleReviewRequest(
+                summary=summary,
+                files=json.loads(files_json) if files_json.strip() else [],
+                changed_areas=json.loads(changed_areas_json) if changed_areas_json.strip() else [],
+                state_transition_changed=state_transition_changed,
+                approval_logic_changed=approval_logic_changed,
+                cross_entity_consistency_changed=cross_entity_consistency_changed,
+                external_business_process_changed=external_business_process_changed,
+                notes=json.loads(notes_json) if notes_json.strip() else [],
+            )
+            return runtime.generate(request).model_dump_json(indent=2)
+
+        @function_tool
+        def business_rules_debug(
+            problem: Annotated[str, Field(description="Domain-process mismatch, approval bug, or broken business rule to analyze")],
+        ) -> str:
+            """Analyze likely invariant or process-semantics causes of a business-rule issue."""
+            return runtime.debug(problem).model_dump_json(indent=2)
+
+        tools.extend([
+            business_rules_manifest,
+            business_rules_consult,
+            business_rules_generate,
+            business_rules_debug,
+        ])
+
+    if normalized.intersection({"release", "release_agent", "release_readiness"}):
+        from release_agent import RELEASE_AGENT_MANIFEST, ReleaseAgentRuntime, ReleaseReviewRequest
+
+        runtime = ReleaseAgentRuntime()
+
+        @function_tool
+        def release_manifest() -> str:
+            """Return the local release specialist manifest and connection notes."""
+            payload = {
+                **RELEASE_AGENT_MANIFEST,
+                "available_specialists": list_available_specialists(),
+                "workspace": str(Path(config.workspace)),
+            }
+            return json.dumps(payload, indent=2, ensure_ascii=True)
+
+        @function_tool
+        def release_consult(
+            query: Annotated[str, Field(description="Question about release readiness, rollout, rollback, or release notes")],
+        ) -> str:
+            """Consult release-readiness and rollout-safety heuristics."""
+            return runtime.consult(query).model_dump_json(indent=2)
+
+        @function_tool
+        def release_generate(
+            summary: Annotated[str, Field(description="Short summary of the release-sensitive change")],
+            files_json: Annotated[str, Field(description="JSON array string of changed files")],
+            changed_areas_json: Annotated[str, Field(description="JSON array string of changed areas or modules")],
+            tests_green: Annotated[bool, Field(description="Whether verification is green")],
+            docs_updated: Annotated[bool, Field(description="Whether docs/runbooks/release notes are updated")],
+            migrations_present: Annotated[bool, Field(description="Whether migrations are part of the release")],
+            rollback_plan_present: Annotated[bool, Field(description="Whether rollback or fallback path is documented")],
+            notes_json: Annotated[str, Field(description="JSON array string of extra notes or assumptions")],
+        ) -> str:
+            """Generate release-readiness findings scaffold for a change set."""
+            request = ReleaseReviewRequest(
+                summary=summary,
+                files=json.loads(files_json) if files_json.strip() else [],
+                changed_areas=json.loads(changed_areas_json) if changed_areas_json.strip() else [],
+                tests_green=tests_green,
+                docs_updated=docs_updated,
+                migrations_present=migrations_present,
+                rollback_plan_present=rollback_plan_present,
+                notes=json.loads(notes_json) if notes_json.strip() else [],
+            )
+            return runtime.generate(request).model_dump_json(indent=2)
+
+        @function_tool
+        def release_debug(
+            problem: Annotated[str, Field(description="Release incident, rollback problem, or rollout readiness issue to analyze")],
+        ) -> str:
+            """Analyze likely release-process causes of a rollout or post-release issue."""
+            return runtime.debug(problem).model_dump_json(indent=2)
+
+        tools.extend([
+            release_manifest,
+            release_consult,
+            release_generate,
+            release_debug,
+        ])
+
+    if normalized.intersection({"migration", "migration_agent", "upgrade"}):
+        from migration_agent import MIGRATION_AGENT_MANIFEST, MigrationAgentRuntime, MigrationReviewRequest
+
+        runtime = MigrationAgentRuntime()
+
+        @function_tool
+        def migration_manifest() -> str:
+            """Return the local migration specialist manifest and connection notes."""
+            payload = {
+                **MIGRATION_AGENT_MANIFEST,
+                "available_specialists": list_available_specialists(),
+                "workspace": str(Path(config.workspace)),
+            }
+            return json.dumps(payload, indent=2, ensure_ascii=True)
+
+        @function_tool
+        def migration_consult(
+            query: Annotated[str, Field(description="Question about upgrades, compatibility, config migration, or deprecated behavior removal")],
+        ) -> str:
+            """Consult migration and compatibility heuristics."""
+            return runtime.consult(query).model_dump_json(indent=2)
+
+        @function_tool
+        def migration_generate(
+            summary: Annotated[str, Field(description="Short summary of the migration-sensitive change")],
+            files_json: Annotated[str, Field(description="JSON array string of changed files")],
+            changed_areas_json: Annotated[str, Field(description="JSON array string of changed areas or modules")],
+            dependency_upgrade: Annotated[bool, Field(description="Whether dependency/framework versions changed")],
+            config_upgrade: Annotated[bool, Field(description="Whether config/env/profile semantics changed")],
+            api_contract_upgrade: Annotated[bool, Field(description="Whether an API contract changed as part of migration")],
+            deprecation_removal: Annotated[bool, Field(description="Whether deprecated or legacy behavior was removed")],
+            notes_json: Annotated[str, Field(description="JSON array string of extra notes or assumptions")],
+        ) -> str:
+            """Generate migration findings scaffold for a change set."""
+            request = MigrationReviewRequest(
+                summary=summary,
+                files=json.loads(files_json) if files_json.strip() else [],
+                changed_areas=json.loads(changed_areas_json) if changed_areas_json.strip() else [],
+                dependency_upgrade=dependency_upgrade,
+                config_upgrade=config_upgrade,
+                api_contract_upgrade=api_contract_upgrade,
+                deprecation_removal=deprecation_removal,
+                notes=json.loads(notes_json) if notes_json.strip() else [],
+            )
+            return runtime.generate(request).model_dump_json(indent=2)
+
+        @function_tool
+        def migration_debug(
+            problem: Annotated[str, Field(description="Upgrade failure, compatibility issue, or deprecated-path regression to analyze")],
+        ) -> str:
+            """Analyze likely compatibility or migration-sequencing causes of an upgrade issue."""
+            return runtime.debug(problem).model_dump_json(indent=2)
+
+        tools.extend([
+            migration_manifest,
+            migration_consult,
+            migration_generate,
+            migration_debug,
         ])
 
     return tools
